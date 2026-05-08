@@ -1,92 +1,350 @@
-# Multi-User Weather Dashboard
+# Multi-User Weather Dashboard 🌦️
 
-Weather Desk is a full-stack assessment project with user authentication, isolated city dashboards, persistent favorites, live weather data, and an AI planning assistant.
+Weather Desk is a full-stack weather dashboard application that supports multiple users with secure authentication, isolated city dashboards, persistent favorites, live weather updates, and an AI-powered planning assistant.
 
-## Tech Stack
+The application allows users to save cities, monitor weather conditions, manage favorites, and receive smart weather insights powered by AI.
 
-- Frontend: Next.js, React, Tailwind CSS
-- Backend: Node.js, Express
-- Database: MongoDB with Mongoose
-- Auth: JWT bearer tokens, bcrypt password hashing
-- Weather API: Open-Meteo geocoding and forecast APIs
-- AI: LangChain with OpenAI when `OPENAI_API_KEY` is configured, plus a deterministic fallback insight engine
+---
 
-I kept the preferred stack because it fits the problem well: Next.js gives a responsive app shell quickly, Express keeps API boundaries explicit, and MongoDB models map cleanly to user-owned city records. The trade-off is operating two deployable services instead of one monolith.
+# 🚀 Features
 
-## Features
+- 🔐 User Authentication (Register/Login/Logout)
+- 👥 Multi-user Support with Isolated Dashboards
+- 🌍 Real-time Weather Data
+- 📍 Add Multiple Cities by Name
+- ⭐ Persistent Favorite Cities
+- 🌡️ Current Weather + Forecast
+- 🤖 AI Weather Planning Assistant
+- ☔ Weather Risk Planning
+- 🔒 JWT-based Authorization
+- 📱 Responsive UI with Tailwind CSS
 
-- Register, log in, restore session, and sign out
-- Add multiple cities by name
-- Fetch current weather and a short forecast dynamically
-- Mark cities as favorites and keep them sorted/visible
-- Enforce strict data isolation by scoping every city query to `req.user._id`
-- AI planner that summarizes the user's saved weather context
-- Custom feature: weather risk planning, which flags rain probability and the warmest city so the dashboard helps with decisions rather than only showing numbers
+---
 
-## Local Setup
-
-### Backend
+# 🏗️ Project Structure
 
 ```bash
+MULTI-USER-WEATHER-DASHBOARD/
+│
+├── backend/
+│   │
+│   ├── node_modules/
+│   ├── src/
+│   │   ├── controllers/
+│   │   ├── middleware/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   └── server.js
+│   │
+│   ├── .env
+│   ├── .env.example
+│   ├── .gitignore
+│   ├── package.json
+│   ├── package-lock.json
+│   └── README.md
+│
+├── frontend/
+│   │
+│   ├── .next/
+│   ├── app/
+│   ├── components/
+│   ├── lib/
+│   ├── node_modules/
+│   ├── .env.local
+│   ├── next.config.mjs
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── postcss.config.mjs
+│   └── tailwind.config.js
+│
+└── README.md
+
+
+🛠️ Tech Stack
+Frontend
+
+
+Next.js
+
+
+React.js
+
+
+Tailwind CSS
+
+
+Backend
+
+
+Node.js
+
+
+Express.js
+
+
+Database
+
+
+MongoDB with Mongoose
+
+
+Authentication
+
+
+JWT Bearer Tokens
+
+
+bcrypt Password Hashing
+
+
+Weather API
+
+
+Open-Meteo Geocoding API
+
+
+Open-Meteo Forecast API
+
+
+AI Integration
+
+
+LangChain
+
+
+OpenAI API
+
+
+Deterministic Fallback Insight Engine
+
+
+
+✨ Core Functionalities
+🔐 Authentication System
+
+
+User Registration
+
+
+User Login
+
+
+Session Restoration
+
+
+Secure Logout
+
+
+Protected Routes using JWT
+
+
+Passwords are securely hashed using bcrypt before storage.
+
+🌍 Weather Dashboard
+Users can:
+
+
+Add multiple cities
+
+
+View live weather data
+
+
+Check short forecasts
+
+
+Save favorite cities
+
+
+Monitor weather conditions dynamically
+
+
+
+🤖 AI Weather Planner
+The AI planner analyzes saved weather data and provides:
+
+
+Weather summaries
+
+
+Travel/outdoor suggestions
+
+
+Rain risk alerts
+
+
+Warmest city recommendations
+
+
+If OPENAI_API_KEY is unavailable, the system automatically switches to a fallback planner so the feature always works.
+
+🔒 Authorization & Data Isolation
+Every city query is scoped using:
+req.user._id
+This ensures users can only access their own weather dashboard data.
+Even if a user guesses another city ID, they cannot access unauthorized records.
+
+⚙️ Local Setup
+1️⃣ Clone Repository
+git clone https://github.com/your-username/multi-user-weather-dashboard.git
+
+2️⃣ Backend Setup
+Navigate to backend:
 cd backend
-cp .env.example .env
+Install dependencies:
 npm install
+Create .env file:
+PORT=5000MONGO_URI=your_mongodb_connection_stringJWT_SECRET=your_secret_keyOPENAI_API_KEY=your_openai_keyCLIENT_ORIGIN=http://localhost:3000
+Run backend server:
 npm run dev
-```
+Backend runs on:
+http://localhost:5000
 
-Set `MONGO_URI` and `JWT_SECRET` in `.env`. `OPENAI_API_KEY` is optional; without it the AI endpoint uses the fallback planner.
-
-### Frontend
-
-```bash
-cd backend/frontend
-cp .env.local
+3️⃣ Frontend Setup
+Navigate to frontend:
+cd frontend
+Install dependencies:
 npm install
+Create .env.local:
+NEXT_PUBLIC_API_URL=http://localhost:5000/api
+Run frontend:
 npm run dev
-```
+Frontend runs on:
+http://localhost:3000
 
-Open `http://localhost:3000`. The API defaults to `http://localhost:5000/api`.
+🧠 Backend Architecture
+The backend follows a modular architecture:
+📂 routes/
+Defines API endpoints and request routes.
+📂 controllers/
+Handles request logic and responses.
+📂 models/
+Defines MongoDB schemas and database models.
+📂 middleware/
+Contains JWT authentication middleware.
+📂 services/
+Handles weather API integration and AI planner logic.
 
-## Architecture
+📡 API & Services
+Weather Service
+Integrated with Open-Meteo APIs for:
 
-The backend separates HTTP routing, controllers, Mongoose models, middleware, and external services:
 
-- `routes/*` defines API surfaces
-- `controllers/*` handles request flow and response shapes
-- `models/*` owns persistence constraints
-- `middleware/authMiddleware.js` verifies JWTs and attaches the authenticated user
-- `services/weatherService.js` integrates Open-Meteo
-- `services/aiAgent.js` integrates LangChain and fallback insight generation
+City Geocoding
 
-The frontend is a small Next.js app with reusable components for auth, the dashboard, and city cards. It stores only the JWT and basic user profile in local storage, then validates the token with `/api/auth/me` on load.
 
-## Authentication and Authorization
+Current Weather
 
-Passwords are hashed with bcrypt. Login and registration return a signed JWT containing the user id in `sub`. Protected routes require `Authorization: Bearer <token>`.
 
-Authorization is enforced at the query layer. City reads, updates, and deletes always include both the city id and `user: req.user._id`, so a valid user cannot access another user's records even if they guess an id.
+Forecast Data
 
-## AI Agent Design
 
-The AI planner receives only the authenticated user's saved cities and weather data. With `OPENAI_API_KEY`, LangChain runs a concise weather-planning prompt through `ChatOpenAI`. If no key is present or the model call fails, the app falls back to deterministic logic that still provides useful recommendations.
+AI Service
+Uses:
 
-This keeps the feature resilient during demos and avoids making core dashboard functionality dependent on AI availability.
 
-## Deployment
+LangChain
 
-Recommended deployment:
 
-- Frontend: Vercel
-- Backend: Render, Railway, Fly.io, or a container service
-- Database: MongoDB Atlas
+ChatOpenAI
 
-Environment variables should be configured in the hosting provider, not committed. Set `CLIENT_ORIGIN` on the API to the deployed frontend URL and `NEXT_PUBLIC_API_URL` on the frontend to the deployed API `/api` URL.
 
-This repository is not deployed from this workspace because deployment credentials and provider access are not available here.
+Deterministic fallback planner
 
-## Known Limitations
 
-- No automated tests are included yet.
-- Weather data is fetched live per dashboard load; a production version should add short-lived caching and rate-limit protection.
-- The frontend uses local storage for the JWT. For a higher-security production app, prefer an HttpOnly secure cookie with CSRF protection.
-- City disambiguation uses the first Open-Meteo geocoding result; a production UX should let users choose between matches.
+to generate weather-based recommendations.
+
+🚀 Deployment
+Recommended Deployment Stack
+Frontend
+
+
+Vercel
+
+
+Backend
+
+
+Render
+
+
+Railway
+
+
+Fly.io
+
+
+Database
+
+
+MongoDB Atlas
+
+
+
+🔐 Environment Variables
+Backend
+PORT=MONGO_URI=JWT_SECRET=OPENAI_API_KEY=CLIENT_ORIGIN=
+Frontend
+NEXT_PUBLIC_API_URL=
+Never commit environment variables to GitHub.
+
+⚠️ Known Limitations
+
+
+No automated tests yet
+
+
+No caching layer for weather API requests
+
+
+JWT stored in local storage
+
+
+City search currently selects the first geocoding result only
+
+
+
+📈 Future Improvements
+
+
+🌙 Dark Mode
+
+
+📊 Weather Analytics Charts
+
+
+📅 Extended Forecasts
+
+
+🔔 Weather Notifications
+
+
+🗺️ Better City Selection UX
+
+
+⚡ API Caching
+
+
+🧪 Automated Testing
+
+
+🍪 HttpOnly Cookie Authentication
+
+
+
+🤝 Contributing
+Contributions are welcome.
+Create a feature branch
+git checkout -b feature-name
+Commit changes
+git commit -m "Added new feature"
+Push branch
+git push origin feature-name
+Then open a Pull Request.
+
+📄 License
+This project is licensed under the MIT License.
+
+👨‍💻 Author
+Ajeet Baghel
