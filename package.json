@@ -1,9 +1,32 @@
 {
+  "name": "weather-dashboard-api",
+  "version": "1.0.0",
+  "description": "Express API for the multi-user weather dashboard assessment.",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js"
+  },
   "dependencies": {
+    "@langchain/core": "^0.3.79",
+    "@langchain/openai": "^0.6.9",
+    "axios": "^1.16.0",
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "mongoose": "^9.6.1",
-    "node": "^26.0.0"
-  }
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.6.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  },
+  "keywords": [
+    "weather",
+    "express",
+    "mongodb",
+    "langchain"
+  ],
+  "author": "",
+  "license": "ISC"
 }
