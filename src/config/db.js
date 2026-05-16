@@ -16,6 +16,13 @@ async function connectDB() {
     );
   }
 
+  const dbName = parsedUri.pathname?.replace(/^\//, "");
+  if (!dbName) {
+    throw new Error(
+      "MONGO_URI must include the database name after the host. Example: mongodb+srv://user:password@cluster.mongodb.net/weatherDashboardApp?retryWrites=true&w=majority&appName=Cluster0"
+    );
+  }
+
   const hasDatabaseInQuery =
     parsedUri.searchParams.has("weatherDashboardApp") ||
     parsedUri.searchParams.has("weather-dashboard-app");

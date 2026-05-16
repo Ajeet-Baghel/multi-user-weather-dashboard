@@ -5,16 +5,24 @@ function notFound(req, _res, next) {
 }
 
 function errorHandler(error, _req, res, _next) {
-  const statusCode = error.statusCode || 500;
-  const message = statusCode === 500 ? "Unexpected server error" : error.message;
+  const isDuplicateKeyError = error && error.code === 11000;
+  const statusCode = error.statusCode || (isDuplicateKeyError ? 409 : 500);
 
-  if (statusCode === 500) {
+  const message = isDuplicateKeyError
+    ? `Duplicate value detected${error.keyValue ? `: ${JSON.stringify(error.keyValue)}` : ""}`
+    : statusCode === 500
+    ? "Unexpected server error"
+    : error.message;
+
+  if (isDuplicateKeyError) {
+    console.error("Duplicate key error:", error.keyValue || error.keyPattern || error);
+  } else if (statusCode === 500) {
     console.error(error);
   }
 
   res.status(statusCode).json({
     message,
-    details: error.details,
+    details: error.details || error.keyValue || error.keyPattern,
   });
 }
 
